@@ -1,0 +1,79 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User account and onboarding profile",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "state": { "type": "string" },
+        "lga": { "type": "string" },
+        "streetAddress": { "type": "string" },
+        "roadStreet": { "type": "string" },
+        "role": { "type": "string", "enum": ["reporter", "collector"] },
+        "avatarUrl": { "type": "string" },
+        "profileCompleted": { "type": "boolean" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "email", "name", "phone", "role"]
+    },
+    "WasteReport": {
+      "title": "WasteReport",
+      "description": "E-waste collection report posted by a reporter and claimable by collectors",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "reporterId": { "type": "string" },
+        "reporterName": { "type": "string" },
+        "reporterEmail": { "type": "string" },
+        "reporterPhone": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "wasteType": { "type": "string" },
+        "size": { "type": "string" },
+        "latitude": { "type": "number" },
+        "longitude": { "type": "number" },
+        "lat": { "type": "number" },
+        "lng": { "type": "number" },
+        "address": { "type": "string" },
+        "roadStreet": { "type": "string" },
+        "lga": { "type": "string" },
+        "state": { "type": "string" },
+        "postalCode": { "type": "string" },
+        "fullAddress": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "claimed", "collected"] },
+        "imageUrl": { "type": "string" },
+        "collectorId": { "type": "string" },
+        "collectorName": { "type": "string" },
+        "collectorPhone": { "type": "string" },
+        "claimedAt": { "type": "string" },
+        "expiresAt": { "type": "string" },
+        "collectedAt": { "type": "string" },
+        "proofPhotoUrl": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "reporterId", "description", "status", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile records indexed by Auth UID"
+    },
+    "/wasteReports/{reportId}": {
+      "schema": "WasteReport",
+      "description": "Public e-waste reports queryable by all authenticated users"
+    },
+    "/wastes/{wasteId}": {
+      "schema": "WasteReport",
+      "description": "Active wastes for Akwa Ibom State broadcasted by disposers and claimed by agents"
+    },
+    "/suggestions/{suggestionId}": {
+      "schema": "UserProfile",
+      "description": "Community suggestions and customer care complaints"
+    }
+  }
+}

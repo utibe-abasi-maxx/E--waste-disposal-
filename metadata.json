@@ -1,0 +1,10 @@
+{
+  "name": "Remix Remix Remix Remix Remix Remix CleanSpot NG",
+  "description": "A community-driven platform connecting citizens to local waste collectors for free, efficient, and sustainable neighborhood cleaning.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

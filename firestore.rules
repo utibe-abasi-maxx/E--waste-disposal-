@@ -1,0 +1,58 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Test connection doc for initial boot check
+    match /test/{testId} {
+      allow read: if true;
+    }
+
+    // Users collection: indexed by auth UID.
+    // One email = One role forever once profileCompleted is true.
+    // Allow role selection during profile setup (when profileCompleted != true).
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.auth.uid == userId;
+      allow update: if request.auth != null && request.auth.uid == userId;
+      allow delete: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Waste reports collection: public to all authenticated users
+    match /reports/{reportId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // Retain wasteReports for backward compatibility
+    match /wasteReports/{reportId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // Wastes collection: public list of pending and claimed wastes
+    match /wastes/{wasteId} {
+      allow read, write: if request.auth != null;
+
+      // Subcollection for private chat between disposer and claimed agent
+      match /messages/{messageId} {
+        allow read, write: if request.auth != null;
+      }
+    }
+
+    // Dedicated chats collection for waste coordination
+    match /chats/{wasteId}/messages/{messageId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // Community Help & Suggestions feed with comments
+    match /suggestions/{suggestionId} {
+      allow read, write: if request.auth != null;
+
+      match /comments/{commentId} {
+        allow read, write: if request.auth != null;
+      }
+    }
+  }
+}
